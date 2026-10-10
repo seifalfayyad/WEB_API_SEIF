@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Event Booking System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="page-wrapper">
+
+    <section class="page-shell">
+
+        <!-- LEFT SIDE -->
+        <div class="login-panel">
+
+            <div class="brand">
+                <div class="brand-circle">E</div>
+                <span>Event Booking System</span>
+            </div>
+
+            <div class="login-content">
+
+                <p class="eyebrow">WELCOME BACK</p>
+
+                <h1>
+                    Your next great
+                    <span>event</span>
+                    starts here.
+                </h1>
+
+                <p class="description">
+                    Sign in to browse events, manage bookings,
+                    and access your dashboard.
+                </p>
+
+                <div class="field-group">
+                    <label for="email" class="field-label">
+                        Email address
+                    </label>
+
+                    <input
+                        id="email"
+                        class="field-input"
+                        type="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="field-group password-group">
+
+                    <div class="password-header">
+                        <label for="password" class="field-label">
+                            Password
+                        </label>
+
+                        <button
+                            type="button"
+                            class="show-button"
+                            onclick="togglePassword()"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <input
+                        id="password"
+                        class="field-input"
+                        type="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                    >
+
+                </div>
+
+                <p id="message"></p>
+
+                <button class="sign-in-button" onclick="login()">
+                    <span>Sign In</span>
+                    <span class="arrow">→</span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <aside class="visual-panel">
+
+            <div class="visual-label">
+                FEATURED EVENT
+            </div>
+
+            <div class="ticket">
+
+                <div class="ticket-art">
+
+                    <div class="ticket-orbit ticket-orbit-one"></div>
+                    <div class="ticket-orbit ticket-orbit-two"></div>
+                    <div class="ticket-sun"></div>
+
+                    <p class="ticket-small-text">
+                        EVENT BOOKING SYSTEM
+                    </p>
+
+                    <h2>
+                        Cyber Security<br>
+                        Conference 2026
+                    </h2>
+
+                </div>
+
+                <div class="ticket-details">
+
+                    <div>
+                        <p class="detail-label">WHEN</p>
+                        <p class="detail-value">20 Nov · 8 PM</p>
+                    </div>
+
+                    <div>
+                        <p class="detail-label">WHERE</p>
+                        <p class="detail-value">Main Hall</p>
+                    </div>
+
+                    <div class="ticket-arrow">
+                        ↗
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p class="visual-footer">
+                Discover events and manage your bookings in one place.
+            </p>
+
+        </aside>
+
+    </section>
+
+</main>
+
+<script src="app.js"></script>
+
+</body>
+</html>
