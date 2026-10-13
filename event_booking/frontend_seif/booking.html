@@ -1,0 +1,2758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bookings - Event Booking System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .booking-main {
+            padding: 48px 58px;
+            min-width: 0;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .booking-title {
+            margin: 8px 0 0;
+            font-family: "Sora", sans-serif;
+            font-size: 46px;
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+
+        .booking-title span {
+            color: var(--accent);
+        }
+
+        .booking-subtitle {
+            margin: 12px 0 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .booking-user-card {
+            padding: 16px 20px;
+            background: var(--lavender-strong);
+            border-radius: 18px;
+            min-width: 240px;
+        }
+
+        .booking-user-card small {
+            display: block;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .booking-layout {
+            display: grid;
+            grid-template-columns: minmax(300px, .9fr) minmax(480px, 1.5fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .booking-card {
+            background: var(--paper);
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 10px 25px rgba(39, 39, 32, .04);
+        }
+
+        .booking-card h2 {
+            margin: 6px 0 6px;
+            font-family: "Sora", sans-serif;
+            font-size: 24px;
+        }
+
+        .booking-card p {
+            color: var(--muted);
+            margin-top: 0;
+        }
+
+        .booking-field {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .booking-field label {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .booking-field input,
+        .booking-field select {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 13px 14px;
+            background: white;
+            color: var(--ink);
+            outline: none;
+        }
+
+        .booking-field input:focus,
+        .booking-field select:focus {
+            border-color: var(--accent);
+        }
+
+        .booking-availability {
+            color: var(--muted);
+            font-size: 13px;
+            min-height: 18px;
+        }
+
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: #f7f4ff;
+            margin: 6px 0 20px;
+        }
+
+        .price-box span:first-child {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .price-box strong {
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        .confirm-button,
+        .cancel-button,
+        .refresh-button {
+            border: 0;
+            border-radius: 999px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .confirm-button {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--accent);
+            color: white;
+        }
+
+        .confirm-button:hover {
+            background: var(--accent-dark);
+        }
+
+        .confirm-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .cancel-button {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--mauve-light);
+            color: var(--ink);
+            margin-top: 14px;
+        }
+
+        .refresh-button {
+            padding: 9px 14px;
+            background: var(--lavender-strong);
+            color: var(--ink);
+        }
+
+        .ticket-header-row,
+        .history-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .ticket-stub {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: white;
+            margin-top: 18px;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            background: var(--ink);
+            color: white;
+        }
+
+        .ticket-header h5 {
+            margin: 4px 0 0;
+            font-family: "Sora", sans-serif;
+            font-size: 20px;
+        }
+
+        .ticket-body {
+            padding: 20px;
+        }
+
+        .ticket-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .ticket-info-grid span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .ticket-divider {
+            border-top: 2px dashed var(--line);
+            margin: 20px 0;
+        }
+
+        .barcode-box {
+            padding: 14px;
+            border-radius: 14px;
+            background: #f7f4ff;
+            text-align: center;
+        }
+
+        .history-card {
+            margin-top: 24px;
+        }
+
+        .history-controls {
+            display: grid;
+            grid-template-columns: 1fr 190px;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .history-controls input,
+        .history-controls select {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 11px 12px;
+            background: white;
+        }
+
+        .booking-history-scroll {
+            max-height: 430px;
+            overflow: auto;
+        }
+
+        .booking-row {
+            border-left: 3px solid var(--accent);
+            background: #f8f6ff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .booking-row-left {
+            min-width: 0;
+        }
+
+        .booking-event-name {
+            display: block;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 5px;
+        }
+
+        .booking-small {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .booking-row-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .booking-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #d9f2e5;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .booking-status.cancelled {
+            background: var(--mauve-light);
+        }
+
+        .booking-status.pending {
+            background: #f6edc8;
+        }
+
+        .booking-total {
+            margin-top: 7px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .booking-alert {
+            margin-bottom: 22px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: var(--lavender-strong);
+            display: none;
+        }
+
+        .booking-alert.show {
+            display: block;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        #bookingPagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        #bookingPagination button {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 8px 12px;
+            background: white;
+            cursor: pointer;
+        }
+
+        #bookingPagination button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        /* =============================
+           MANAGEMENT EVENT AVAILABILITY
+        ============================== */
+
+        .availability-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .availability-item {
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 16px;
+            background: #f8f6ff;
+        }
+
+        .availability-item h3 {
+            margin: 0 0 12px;
+            font-family: "Sora", sans-serif;
+            font-size: 16px;
+        }
+
+        .availability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .availability-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 11px 12px;
+        }
+
+        .availability-detail span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 4px;
+        }
+
+        .availability-detail strong {
+            font-size: 14px;
+        }
+
+        .availability-number {
+            color: var(--accent);
+        }
+
+        .empty-message {
+            color: var(--muted);
+            padding: 18px 0;
+            font-size: 14px;
+        }
+
+        .management-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .summary-box {
+            background: #f7f4ff;
+            border-radius: 15px;
+            padding: 16px;
+        }
+
+        .summary-box span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .summary-box strong {
+            font-family: "Sora", sans-serif;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        @media(max-width:1050px) {
+            .booking-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:800px) {
+            .booking-main {
+                padding: 30px 22px;
+            }
+
+            .booking-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .booking-title {
+                font-size: 36px;
+            }
+
+            .history-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .ticket-info-grid,
+            .availability-grid,
+            .management-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .booking-row-right {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-page">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-circle">E</div>
+            <span>Event Booking</span>
+        </div>
+
+        <nav class="sidebar-nav" id="bookingSidebar"></nav>
+
+        <button
+            class="logout-button"
+            id="logoutButton"
+        >
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN PAGE
+    ========================== -->
+
+    <main class="booking-main">
+
+        <div class="booking-header">
+
+            <div>
+
+                <div class="dashboard-eyebrow">
+                    EVENT BOOKING SYSTEM
+                </div>
+
+                <h1 class="booking-title" id="bookingPageTitle">
+                    My <span>Bookings</span>
+                </h1>
+
+                <p
+                    class="booking-subtitle"
+                    id="bookingPageSubtitle"
+                >
+                    Loading booking information...
+                </p>
+
+            </div>
+
+            <div class="booking-user-card">
+
+                <small id="authenticatedRole">
+                    Authenticated User
+                </small>
+
+                <strong id="authenticatedUser">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="alertBox"
+            class="booking-alert"
+        ></div>
+
+
+        <div class="booking-layout">
+
+
+            <!-- ==================================
+                 LEFT SIDE - CUSTOMER BOOKING FORM
+            =================================== -->
+
+            <section
+                class="booking-card"
+                id="customerBookingSection"
+            >
+
+                <div class="card-label">
+                    BOOK TICKET
+                </div>
+
+                <h2>
+                    Choose your event
+                </h2>
+
+                <p>
+                    Select an available event and ticket quantity.
+                </p>
+
+
+                <form
+                    id="bookingForm"
+                    novalidate
+                >
+
+                    <div class="booking-field">
+
+                        <label for="event_id">
+                            Select Event
+                        </label>
+
+                        <select
+                            id="event_id"
+                            required
+                            disabled
+                        >
+                            <option value="">
+                                Loading events...
+                            </option>
+                        </select>
+
+                        <div
+                            id="eventAvailability"
+                            class="booking-availability"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="booking-field">
+
+                        <label for="quantity">
+                            Ticket Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantity"
+                            value="1"
+                            min="1"
+                            max="1"
+                            required
+                            disabled
+                        >
+
+                    </div>
+
+
+                    <div class="price-box">
+
+                        <span>
+                            Estimated Price
+                        </span>
+
+                        <strong id="totalPriceDisplay">
+                            RM 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="btnSubmit"
+                        class="confirm-button"
+                        disabled
+                    >
+                        Confirm Booking
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- ==================================
+                 LEFT SIDE - MANAGEMENT VIEW
+            =================================== -->
+
+            <section
+                class="booking-card d-none"
+                id="managementAvailabilitySection"
+            >
+
+                <div class="card-label">
+                    EVENT AVAILABILITY
+                </div>
+
+                <h2 id="availabilityHeading">
+                    Ticket Availability
+                </h2>
+
+                <p id="availabilityDescription">
+                    Review available tickets for your events.
+                </p>
+
+
+                <div class="management-summary">
+
+                    <div class="summary-box">
+                        <span>TOTAL EVENTS</span>
+                        <strong id="managementEventCount">
+                            0
+                        </strong>
+                    </div>
+
+                    <div class="summary-box">
+                        <span>TOTAL TICKETS AVAILABLE</span>
+                        <strong id="managementTicketCount">
+                            0
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="managementEventList"
+                    class="availability-list"
+                >
+                    <div class="empty-message">
+                        Loading event availability...
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 RIGHT SIDE
+            ========================== -->
+
+            <section>
+
+
+                <!-- CUSTOMER LATEST PASS -->
+
+                <div
+                    class="booking-card"
+                    id="customerTicketSection"
+                >
+
+                    <div class="ticket-header-row">
+
+                        <div>
+
+                            <div class="card-label">
+                                LATEST PASS
+                            </div>
+
+                            <h2>
+                                My Event Ticket
+                            </h2>
+
+                            <p>
+                                Your latest active booking and ticket status.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="refresh-button"
+                            onclick="loadBookings()"
+                        >
+                            Refresh
+                        </button>
+
+                    </div>
+
+
+                    <div id="ticketContainer"></div>
+
+
+                    <div
+                        id="actionContainer"
+                        class="d-none"
+                    >
+
+                        <button
+                            class="cancel-button"
+                            id="btnCancel"
+                            onclick="cancelCurrentBooking()"
+                        >
+                            Cancel Ticket
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOOKING RECORDS -->
+
+                <div
+                    class="booking-card history-card"
+                    id="bookingHistoryCard"
+                >
+
+                    <div class="history-heading">
+
+                        <div>
+
+                            <div class="card-label">
+                                BOOKING RECORDS
+                            </div>
+
+                            <h2 id="historyTitle">
+                                Booking History
+                            </h2>
+
+                            <p id="historyDescription">
+                                Your bookings, quantities, totals and current status.
+                            </p>
+
+                        </div>
+
+                        <button
+                            id="refreshHistoryButton"
+                            class="refresh-button"
+                        >
+                            Refresh
+                        </button>
+
+                    </div>
+
+
+                    <div class="history-controls">
+
+                        <input
+                            id="bookingSearch"
+                            placeholder="Search event or booking number"
+                        >
+
+                        <select id="bookingStatus">
+
+                            <option value="">
+                                All statuses
+                            </option>
+
+                            <option value="Confirmed">
+                                Confirmed
+                            </option>
+
+                            <option value="Cancelled">
+                                Cancelled
+                            </option>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        id="bookingHistory"
+                        class="booking-history-scroll"
+                    >
+
+                        <div class="empty-message">
+                            Loading booking records...
+                        </div>
+
+                    </div>
+
+
+                    <div id="bookingPagination"></div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+    /* =========================
+       API SETTINGS
+    ========================== */
+
+    const API_URL =
+        "../backend/bookings.php";
+
+    const EVENTS_API =
+        "../backend/events.php";
+
+
+    /* =========================
+       AUTHENTICATION
+    ========================== */
+
+    const token =
+        localStorage.getItem("token");
+
+    let currentUser =
+        JSON.parse(
+            localStorage.getItem("user") || "null"
+        );
+
+
+    if (!token || !currentUser) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    const currentRole =
+        String(currentUser.role || "").trim();
+
+    let currentUserId =
+        Number(currentUser.user_id);
+
+    let currentHolderName =
+        currentUser.name || "Ticket holder";
+
+    let currentBookingId = null;
+
+    let events = [];
+
+    let historyPage = 1;
+
+    const requestedEventId =
+        new URLSearchParams(
+            window.location.search
+        ).get("event_id");
+
+
+    const authHeaders = {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            "Bearer " + token
+
+    };
+
+
+    /* =========================
+       ROLE HELPERS
+    ========================== */
+
+    function isCustomer() {
+        return currentRole === "Customer";
+    }
+
+    function isOrganiser() {
+        return currentRole === "Organiser";
+    }
+
+    function isStaff() {
+        return currentRole === "Staff";
+    }
+
+    function isAdministrator() {
+        return currentRole === "Administrator";
+    }
+
+
+    /* =========================
+       PAGE SETUP
+    ========================== */
+
+    function setupPageForRole() {
+
+        setupSidebar();
+
+        document
+            .getElementById("authenticatedRole")
+            .textContent = currentRole;
+
+        document
+            .getElementById("authenticatedUser")
+            .textContent =
+                `${currentUser.name} (${currentUser.email})`;
+
+
+        if (isCustomer()) {
+
+            document
+                .getElementById("bookingPageTitle")
+                .innerHTML =
+                    `My <span>Bookings</span>`;
+
+            document
+                .getElementById("bookingPageSubtitle")
+                .textContent =
+                    "Book tickets, review your latest pass and manage your booking history.";
+
+            document
+                .getElementById("customerBookingSection")
+                .classList.remove("d-none");
+
+            document
+                .getElementById("customerTicketSection")
+                .classList.remove("d-none");
+
+            document
+                .getElementById("managementAvailabilitySection")
+                .classList.add("d-none");
+
+            document
+                .getElementById("historyTitle")
+                .textContent =
+                    "My Booking History";
+
+            document
+                .getElementById("historyDescription")
+                .textContent =
+                    "View your bookings, ticket quantities, totals and current status.";
+
+        }
+
+        else {
+
+            document
+                .getElementById("bookingPageTitle")
+                .innerHTML =
+                    `Booking <span>Management</span>`;
+
+            document
+                .getElementById("bookingPageSubtitle")
+                .textContent =
+                    isOrganiser()
+                    ? "Review ticket availability and bookings for events you organise."
+                    : "Review event ticket availability and booking records.";
+
+            document
+                .getElementById("customerBookingSection")
+                .classList.add("d-none");
+
+            document
+                .getElementById("customerTicketSection")
+                .classList.add("d-none");
+
+            document
+                .getElementById("managementAvailabilitySection")
+                .classList.remove("d-none");
+
+
+            if (isOrganiser()) {
+
+                document
+                    .getElementById("availabilityHeading")
+                    .textContent =
+                        "My Event Ticket Availability";
+
+                document
+                    .getElementById("availabilityDescription")
+                    .textContent =
+                        "Available tickets for events that you organise.";
+
+                document
+                    .getElementById("historyTitle")
+                    .textContent =
+                        "Relevant Bookings";
+
+                document
+                    .getElementById("historyDescription")
+                    .textContent =
+                        "Bookings made by customers for events you organise.";
+
+            }
+
+            else if (isStaff()) {
+
+                document
+                    .getElementById("availabilityHeading")
+                    .textContent =
+                        "Event Ticket Availability";
+
+                document
+                    .getElementById("historyTitle")
+                    .textContent =
+                        "Booking Records";
+
+                document
+                    .getElementById("historyDescription")
+                    .textContent =
+                        "View booking activity and ticket status.";
+
+            }
+
+            else if (isAdministrator()) {
+
+                document
+                    .getElementById("availabilityHeading")
+                    .textContent =
+                        "System Ticket Availability";
+
+                document
+                    .getElementById("historyTitle")
+                    .textContent =
+                        "All Booking Records";
+
+                document
+                    .getElementById("historyDescription")
+                    .textContent =
+                        "Review booking activity across the Event Booking System.";
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================
+       SIDEBAR
+    ========================== */
+
+    function setupSidebar() {
+
+        const sidebar =
+            document.getElementById(
+                "bookingSidebar"
+            );
+
+
+        if (isAdministrator()) {
+
+            sidebar.innerHTML = `
+
+                <button
+                    class="nav-item"
+                    onclick="goToDashboard()"
+                >
+                    Dashboard
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="goToUsers()"
+                >
+                    Users
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="goToVenues()"
+                >
+                    Venues
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="goToEvents()"
+                >
+                    Events
+                </button>
+
+                <button
+                    class="nav-item active"
+                >
+                    Bookings
+                </button>
+
+            `;
+
+        }
+
+        else if (
+            isOrganiser() ||
+            isStaff()
+        ) {
+
+            sidebar.innerHTML = `
+
+                <button
+                    class="nav-item"
+                    onclick="goToDashboard()"
+                >
+                    Dashboard
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="goToEvents()"
+                >
+                    Events
+                </button>
+
+                <button
+                    class="nav-item active"
+                >
+                    Bookings
+                </button>
+
+            `;
+
+        }
+
+        else {
+
+            sidebar.innerHTML = `
+
+                <button
+                    class="nav-item"
+                    onclick="goToDashboard()"
+                >
+                    Dashboard
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="goToEvents()"
+                >
+                    Events
+                </button>
+
+                <button
+                    class="nav-item active"
+                >
+                    My Bookings
+                </button>
+
+            `;
+
+        }
+
+    }
+
+
+    /* =========================
+       ALERT
+    ========================== */
+
+    function showAlert(message) {
+
+        const alertBox =
+            document.getElementById(
+                "alertBox"
+            );
+
+        alertBox.className =
+            "booking-alert show";
+
+        alertBox.innerHTML =
+            message;
+
+    }
+
+
+    /* =========================
+       CUSTOMER EVENT FORM
+    ========================== */
+
+    function calculateTotal() {
+
+        if (!isCustomer()) {
+            return;
+        }
+
+
+        const eventSelect =
+            document.getElementById(
+                "event_id"
+            );
+
+        const selectedOption =
+            eventSelect.options[
+                eventSelect.selectedIndex
+            ];
+
+
+        if (!selectedOption) {
+            return;
+        }
+
+
+        const price =
+            parseFloat(
+                selectedOption.dataset.price
+            ) || 0;
+
+        const available =
+            parseInt(
+                selectedOption.dataset.available
+            ) || 0;
+
+        const qty =
+            parseInt(
+                document.getElementById(
+                    "quantity"
+                ).value
+            ) || 0;
+
+
+        document
+            .getElementById("quantity")
+            .max =
+                available > 0
+                ? available
+                : 1;
+
+
+        document
+            .getElementById(
+                "eventAvailability"
+            )
+            .textContent =
+                available > 0
+                ? `${available} ticket(s) available`
+                : "Sold out";
+
+
+        document
+            .getElementById(
+                "totalPriceDisplay"
+            )
+            .textContent =
+                `RM ${(price * qty).toFixed(2)}`;
+
+
+        document
+            .getElementById(
+                "btnSubmit"
+            )
+            .disabled =
+                available <= 0 ||
+                qty < 1 ||
+                qty > available;
+
+    }
+
+
+    /* =========================
+       LOAD EVENTS
+    ========================== */
+
+    async function loadEvents() {
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `${EVENTS_API}?page=1&limit=50&sort=event_date&order=asc`,
+
+                    {
+                        method: "GET",
+                        headers: authHeaders
+                    }
+
+                );
+
+
+            if (response.status === 401) {
+
+                handleExpiredSession();
+                return;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.message ||
+                    "Unable to load events."
+                );
+
+            }
+
+
+            events =
+                Array.isArray(result)
+                ? result
+                : (
+                    result.data ||
+                    result.events ||
+                    []
+                );
+
+
+            if (isCustomer()) {
+
+                renderCustomerEventOptions();
+
+            }
+
+            else {
+
+                renderManagementAvailability();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            if (isCustomer()) {
+
+                document
+                    .getElementById(
+                        "event_id"
+                    )
+                    .innerHTML =
+                        `<option value="">
+                            Unable to load events
+                        </option>`;
+
+            }
+
+            else {
+
+                document
+                    .getElementById(
+                        "managementEventList"
+                    )
+                    .innerHTML =
+                        `<div class="empty-message">
+                            Unable to load event availability.
+                        </div>`;
+
+            }
+
+        }
+
+    }
+
+
+    /* =========================
+       CUSTOMER EVENT OPTIONS
+    ========================== */
+
+    function renderCustomerEventOptions() {
+
+        const select =
+            document.getElementById(
+                "event_id"
+            );
+
+
+        select.innerHTML =
+            events.length
+
+            ? events.map(event => `
+
+                <option
+                    value="${event.event_id}"
+                    data-price="${event.ticket_price}"
+                    data-available="${event.available_tickets}"
+                >
+                    ${escapeHtml(event.title)}
+                    - RM ${Number(event.ticket_price).toFixed(2)}
+                </option>
+
+            `).join("")
+
+            : `
+
+                <option value="">
+                    No published events available
+                </option>
+
+            `;
+
+
+        select.disabled =
+            events.length === 0;
+
+
+        document
+            .getElementById(
+                "quantity"
+            )
+            .disabled =
+                events.length === 0;
+
+
+        if (
+            requestedEventId &&
+            events.some(
+                event =>
+                    String(event.event_id) ===
+                    String(requestedEventId)
+            )
+        ) {
+
+            select.value =
+                String(requestedEventId);
+
+        }
+
+
+        calculateTotal();
+
+    }
+
+
+    /* =========================
+       MANAGEMENT AVAILABILITY
+    ========================== */
+
+    function renderManagementAvailability() {
+
+        let visibleEvents =
+            [...events];
+
+
+        /*
+         Organiser must only see
+         availability for own events.
+        */
+
+        if (isOrganiser()) {
+
+            visibleEvents =
+                visibleEvents.filter(
+                    event =>
+                        Number(event.organiser_id) ===
+                        Number(currentUserId)
+                );
+
+        }
+
+
+        const container =
+            document.getElementById(
+                "managementEventList"
+            );
+
+
+        document
+            .getElementById(
+                "managementEventCount"
+            )
+            .textContent =
+                visibleEvents.length;
+
+
+        const totalAvailable =
+            visibleEvents.reduce(
+                (total, event) =>
+                    total +
+                    Number(
+                        event.available_tickets || 0
+                    ),
+                0
+            );
+
+
+        document
+            .getElementById(
+                "managementTicketCount"
+            )
+            .textContent =
+                totalAvailable;
+
+
+        if (!visibleEvents.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-message">
+                    No event records are available for this account.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            visibleEvents.map(event => {
+
+                const totalTickets =
+                    Number(
+                        event.total_tickets || 0
+                    );
+
+                const availableTickets =
+                    Number(
+                        event.available_tickets || 0
+                    );
+
+                const bookedTickets =
+                    Math.max(
+                        0,
+                        totalTickets -
+                        availableTickets
+                    );
+
+
+                return `
+
+                    <div class="availability-item">
+
+                        <h3>
+                            ${escapeHtml(event.title)}
+                        </h3>
+
+                        <div class="availability-grid">
+
+                            <div class="availability-detail">
+
+                                <span>
+                                    Available
+                                </span>
+
+                                <strong class="availability-number">
+                                    ${availableTickets}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="availability-detail">
+
+                                <span>
+                                    Booked
+                                </span>
+
+                                <strong>
+                                    ${bookedTickets}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="availability-detail">
+
+                                <span>
+                                    Total Tickets
+                                </span>
+
+                                <strong>
+                                    ${totalTickets}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="availability-detail">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong>
+                                    ${escapeHtml(
+                                        event.status || "Unknown"
+                                    )}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =========================
+       BOOKING HISTORY
+    ========================== */
+
+    function renderBookingHistory(list) {
+
+        const container =
+            document.getElementById(
+                "bookingHistory"
+            );
+
+
+        if (!list.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-message">
+                    ${
+                        isCustomer()
+                        ? "You do not have any bookings yet."
+                        : "No relevant booking records were found."
+                    }
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            list.map(booking => {
+
+                const status =
+                    String(
+                        booking.booking_status ||
+                        booking.status ||
+                        "Unknown"
+                    );
+
+                const statusClass =
+                    status.toLowerCase() ===
+                    "cancelled"
+
+                    ? "cancelled"
+
+                    : status.toLowerCase() ===
+                      "pending"
+
+                    ? "pending"
+
+                    : "";
+
+
+                let customerInfo = "";
+
+
+                if (!isCustomer()) {
+
+                    customerInfo = `
+
+                        <div class="booking-small">
+
+                            Customer:
+                            <strong>
+                                ${escapeHtml(
+                                    booking.customer_name ||
+                                    "Unknown"
+                                )}
+                            </strong>
+
+                            ${
+                                booking.customer_email
+                                ? ` · ${escapeHtml(
+                                    booking.customer_email
+                                )}`
+                                : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                return `
+
+                    <div class="booking-row">
+
+                        <div class="booking-row-left">
+
+                            <span class="booking-event-name">
+
+                                ${escapeHtml(
+                                    booking.event_name ||
+                                    "Event"
+                                )}
+
+                            </span>
+
+
+                            <div class="booking-small">
+
+                                Booking
+                                #${booking.booking_id}
+
+                                ·
+
+                                ${booking.quantity}
+                                ticket(s)
+
+                            </div>
+
+
+                            ${customerInfo}
+
+                        </div>
+
+
+                        <div class="booking-row-right">
+
+                            <span
+                                class="booking-status ${statusClass}"
+                            >
+                                ${escapeHtml(status)}
+                            </span>
+
+                            <div class="booking-total">
+
+                                RM
+                                ${Number(
+                                    booking.total_price || 0
+                                ).toFixed(2)}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =========================
+       LOAD BOOKINGS
+    ========================== */
+
+    async function loadBookings() {
+
+        try {
+
+            const search =
+                encodeURIComponent(
+                    document
+                        .getElementById(
+                            "bookingSearch"
+                        )
+                        .value
+                        .trim()
+                );
+
+
+            const status =
+                encodeURIComponent(
+                    document
+                        .getElementById(
+                            "bookingStatus"
+                        )
+                        .value
+                );
+
+
+            const response =
+                await fetch(
+
+                    `${API_URL}?page=${historyPage}&limit=10&search=${search}&status=${status}`,
+
+                    {
+                        method: "GET",
+                        headers: authHeaders
+                    }
+
+                );
+
+
+            if (response.status === 401) {
+
+                handleExpiredSession();
+                return;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.message ||
+                    "Unable to load bookings."
+                );
+
+            }
+
+
+            let list = [];
+
+
+            if (Array.isArray(result)) {
+
+                list = result;
+
+            }
+
+            else if (
+                Array.isArray(result.data)
+            ) {
+
+                list = result.data;
+
+            }
+
+            else if (
+                Array.isArray(result.bookings)
+            ) {
+
+                list = result.bookings;
+
+            }
+
+
+            renderBookingHistory(list);
+
+            renderBookingPagination(
+                result.pagination
+            );
+
+
+            /*
+             Latest ticket only belongs
+             to Customer view.
+            */
+
+            if (isCustomer()) {
+
+                const activeBookings =
+                    list.filter(
+                        booking =>
+                            String(
+                                booking.booking_status ||
+                                booking.status ||
+                                ""
+                            )
+                            .toLowerCase() !==
+                            "cancelled"
+                    );
+
+
+                if (
+                    activeBookings.length > 0
+                ) {
+
+                    renderTicket(
+                        activeBookings[0]
+                    );
+
+                }
+
+                else {
+
+                    document
+                        .getElementById(
+                            "ticketContainer"
+                        )
+                        .innerHTML = `
+
+                            <div class="empty-message">
+                                No active ticket.
+                            </div>
+
+                        `;
+
+
+                    document
+                        .getElementById(
+                            "actionContainer"
+                        )
+                        .classList
+                        .add("d-none");
+
+                }
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document
+                .getElementById(
+                    "bookingHistory"
+                )
+                .innerHTML = `
+
+                    <div class="empty-message">
+                        Unable to load booking records.
+                    </div>
+
+                `;
+
+        }
+
+    }
+
+
+    /* =========================
+       PAGINATION
+    ========================== */
+
+    function renderBookingPagination(
+        pagination
+    ) {
+
+        const container =
+            document.getElementById(
+                "bookingPagination"
+            );
+
+
+        if (
+            !pagination ||
+            pagination.totalPages <= 1
+        ) {
+
+            container.innerHTML = "";
+            return;
+
+        }
+
+
+        container.innerHTML = `
+
+            <button
+                id="previousBookingPage"
+                ${
+                    pagination.page <= 1
+                    ? "disabled"
+                    : ""
+                }
+            >
+                Previous
+            </button>
+
+
+            <span>
+                Page
+                ${pagination.page}
+                of
+                ${pagination.totalPages}
+            </span>
+
+
+            <button
+                id="nextBookingPage"
+                ${
+                    pagination.page >=
+                    pagination.totalPages
+                    ? "disabled"
+                    : ""
+                }
+            >
+                Next
+            </button>
+
+        `;
+
+
+        document
+            .getElementById(
+                "previousBookingPage"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+
+                    historyPage--;
+
+                    loadBookings();
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "nextBookingPage"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+
+                    historyPage++;
+
+                    loadBookings();
+
+                }
+            );
+
+    }
+
+
+    /* =========================
+       CUSTOMER TICKET
+    ========================== */
+
+    function renderTicket(data) {
+
+        if (!isCustomer()) {
+            return;
+        }
+
+
+        currentBookingId =
+            data.booking_id ||
+            data.id;
+
+
+        currentHolderName =
+            currentUser.name;
+
+
+        const status =
+            String(
+                data.booking_status ||
+                data.status ||
+                "Confirmed"
+            );
+
+
+        const confirmed =
+            status.toLowerCase() ===
+            "confirmed";
+
+
+        const bookingCode =
+            `BKG-2026-${String(
+                currentBookingId
+            ).padStart(4, "0")}`;
+
+
+        document
+            .getElementById(
+                "ticketContainer"
+            )
+            .innerHTML = `
+
+                <div class="ticket-stub">
+
+                    <div class="ticket-header">
+
+                        <div>
+
+                            <small>
+                                OFFICIAL EVENT PASS
+                            </small>
+
+                            <h5>
+                                ${escapeHtml(
+                                    data.event_name ||
+                                    "Event Ticket"
+                                )}
+                            </h5>
+
+                        </div>
+
+                        <strong>
+                            ${
+                                confirmed
+                                ? "✓ VALID"
+                                : "✕ CANCELLED"
+                            }
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ticket-body">
+
+                        <div class="ticket-info-grid">
+
+                            <div>
+
+                                <span>
+                                    Booking Reference
+                                </span>
+
+                                <strong>
+                                    ${bookingCode}
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Ticket Holder
+                                </span>
+
+                                <strong>
+                                    ${escapeHtml(
+                                        currentHolderName
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Ticket Quantity
+                                </span>
+
+                                <strong>
+                                    ${data.quantity || 1}
+                                    Ticket(s)
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Total Paid
+                                </span>
+
+                                <strong>
+                                    RM
+                                    ${Number(
+                                        data.total_price || 0
+                                    ).toFixed(2)}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="ticket-divider"></div>
+
+
+                        <div class="barcode-box">
+
+                            <strong>
+                                ${bookingCode}
+                            </strong>
+
+                            <div class="booking-small">
+                                Present this booking reference at the venue.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+        if (confirmed) {
+
+            document
+                .getElementById(
+                    "actionContainer"
+                )
+                .classList
+                .remove("d-none");
+
+        }
+
+        else {
+
+            document
+                .getElementById(
+                    "actionContainer"
+                )
+                .classList
+                .add("d-none");
+
+        }
+
+    }
+
+
+    /* =========================
+       CREATE BOOKING
+       CUSTOMER ONLY
+    ========================== */
+
+    document
+        .getElementById(
+            "bookingForm"
+        )
+        .addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                if (!isCustomer()) {
+                    return;
+                }
+
+
+                const eventId =
+                    document
+                        .getElementById(
+                            "event_id"
+                        )
+                        .value;
+
+
+                const quantity =
+                    parseInt(
+                        document
+                            .getElementById(
+                                "quantity"
+                            )
+                            .value
+                    ) || 1;
+
+
+                const selectedOption =
+                    document
+                        .getElementById(
+                            "event_id"
+                        )
+                        .selectedOptions[0];
+
+
+                const available =
+                    parseInt(
+                        selectedOption
+                            ?.dataset
+                            .available || "0"
+                    );
+
+
+                if (
+                    !eventId ||
+                    quantity < 1 ||
+                    quantity > available
+                ) {
+
+                    showAlert(
+                        "<strong>Check your booking:</strong> Select a valid event and ticket quantity."
+                    );
+
+                    return;
+
+                }
+
+
+                const button =
+                    document.getElementById(
+                        "btnSubmit"
+                    );
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Processing...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            API_URL,
+                            {
+                                method: "POST",
+
+                                headers:
+                                    authHeaders,
+
+                                body:
+                                    JSON.stringify({
+                                        event_id:
+                                            Number(eventId),
+
+                                        quantity:
+                                            quantity
+                                    })
+                            }
+                        );
+
+
+                    if (
+                        response.status === 401
+                    ) {
+
+                        handleExpiredSession();
+                        return;
+
+                    }
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            result.message ||
+                            "Booking failed."
+                        );
+
+                    }
+
+
+                    showAlert(
+
+                        `<strong>Booking confirmed!</strong>
+                        ${
+                            result.email_message ||
+                            "Your booking has been created successfully."
+                        }`
+
+                    );
+
+
+                    await loadEvents();
+
+                    await loadBookings();
+
+                }
+
+                catch (error) {
+
+                    showAlert(
+                        `<strong>Booking failed:</strong>
+                        ${escapeHtml(
+                            error.message
+                        )}`
+                    );
+
+                }
+
+                finally {
+
+                    button.textContent =
+                        "Confirm Booking";
+
+                    calculateTotal();
+
+                }
+
+            }
+        );
+
+
+    /* =========================
+       CANCEL BOOKING
+       CUSTOMER ONLY
+    ========================== */
+
+    async function cancelCurrentBooking() {
+
+        if (
+            !isCustomer() ||
+            !currentBookingId
+        ) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                `Are you sure you want to cancel booking BKG-2026-${String(
+                    currentBookingId
+                ).padStart(4, "0")}?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+
+                        method: "PUT",
+
+                        headers:
+                            authHeaders,
+
+                        body:
+                            JSON.stringify({
+
+                                booking_id:
+                                    Number(
+                                        currentBookingId
+                                    ),
+
+                                booking_status:
+                                    "Cancelled"
+
+                            })
+
+                    }
+                );
+
+
+            if (
+                response.status === 401
+            ) {
+
+                handleExpiredSession();
+                return;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.message ||
+                    "Unable to cancel booking."
+                );
+
+            }
+
+
+            showAlert(
+
+                `<strong>Booking cancelled.</strong>
+                ${
+                    result.email_message ||
+                    result.message ||
+                    ""
+                }`
+
+            );
+
+
+            await loadEvents();
+
+            await loadBookings();
+
+        }
+
+        catch (error) {
+
+            showAlert(
+
+                `<strong>Cancellation failed:</strong>
+                ${escapeHtml(
+                    error.message
+                )}`
+
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       SECURITY / SESSION
+    ========================== */
+
+    function handleExpiredSession() {
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "user"
+        );
+
+        alert(
+            "Your session has expired. Please log in again."
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    /* =========================
+       BASIC HTML ESCAPE
+    ========================== */
+
+    function escapeHtml(value) {
+
+        return String(
+            value ?? ""
+        )
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================== */
+
+    function goToDashboard() {
+        window.location.href =
+            "dashboard.html";
+    }
+
+    function goToUsers() {
+        window.location.href =
+            "users.html";
+    }
+
+    function goToVenues() {
+        window.location.href =
+            "venues.html";
+    }
+
+    function goToEvents() {
+        window.location.href =
+            "events.html";
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    document
+        .getElementById(
+            "logoutButton"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                localStorage.removeItem(
+                    "token"
+                );
+
+                localStorage.removeItem(
+                    "user"
+                );
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+
+    /* =========================
+       FILTER EVENTS
+    ========================== */
+
+    document
+        .getElementById(
+            "event_id"
+        )
+        .addEventListener(
+            "change",
+            calculateTotal
+        );
+
+
+    document
+        .getElementById(
+            "quantity"
+        )
+        .addEventListener(
+            "input",
+            calculateTotal
+        );
+
+
+    /* =========================
+       BOOKING SEARCH
+    ========================== */
+
+    document
+        .getElementById(
+            "refreshHistoryButton"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                loadBookings();
+
+                if (!isCustomer()) {
+                    loadEvents();
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "bookingSearch"
+        )
+        .addEventListener(
+            "input",
+            () => {
+
+                historyPage = 1;
+
+                loadBookings();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "bookingStatus"
+        )
+        .addEventListener(
+            "change",
+            () => {
+
+                historyPage = 1;
+
+                loadBookings();
+
+            }
+        );
+
+
+    /* =========================
+       START PAGE
+    ========================== */
+
+    setupPageForRole();
+
+    loadEvents();
+
+    loadBookings();
+
+</script>
+
+</body>
+
+</html>
